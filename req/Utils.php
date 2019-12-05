@@ -49,4 +49,41 @@ abstract class Utils {
 		return true;
 	}
 
+	public static function loadFromEmail($email){
+		$db = new DB();
+		$query = $db->prepare("SELECT
+														id,
+														senha,
+														nivel,
+														email,
+														bloqueado
+													FROM
+														usuarios
+													WHERE
+														email=:email");
+		$executou = $query->execute([
+			':email' => $email
+		]);
+		
+		$dados = $query->fetch(PDO::FETCH_ASSOC);
+		if($dados['nivel'] == 1){
+			return new Administrador(
+				$dados['id'],
+				$dados['email'],
+				$dados['senha'],
+				$dados['bloqueado']);
+		} elseif($dados['nivel'] == 2) {
+			return new Usuario(
+				$dados['id'],
+				$dados['email'],
+				$dados['senha'],
+				$dados['bloqueado']);
+		} else {
+			return new Espectador(
+				$dados['id'],
+				$dados['email'],
+				$dados['senha'],
+				$dados['bloqueado']);
+		}
+	}
 }

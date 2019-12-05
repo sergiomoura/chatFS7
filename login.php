@@ -3,15 +3,18 @@
 	// Incluindo scripts necessários
 	include('./req/DB.php');
 	include('./req/Espectador.php');
+	include('./req/Usuario.php');
+	include('./req/Administrador.php');
+	include('./req/Utils.php');
 
 	// Verificando se form foi submetido
 	if($_POST){
-		$u = new Espectador();
-		var_dump($u->logar($_POST['email'],$_POST['senha']));
-		exit;
+		$u = Utils::loadFromEmail($_POST['email']);
+		echo('<pre>');
+		print_r($u);
+		echo('</pre>');
+		die();
 	}
-
-
 ?>
 
 
