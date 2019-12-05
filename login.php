@@ -6,14 +6,36 @@
 	include('./req/Usuario.php');
 	include('./req/Administrador.php');
 	include('./req/Utils.php');
+	
+	// Definindo valores padrao
+	$erro_login = false;
+	$email = '';
+	$senha = '';
 
 	// Verificando se form foi submetido
 	if($_POST){
+
+		// Lendo os valores do POST para variáveis;
+		$email = $_POST['email'];
+		$senha = $_POST['senha'];
+		
+		// Carregando usuário da base
 		$u = Utils::loadFromEmail($_POST['email']);
-		echo('<pre>');
-		print_r($u);
-		echo('</pre>');
-		die();
+
+		// Tentando logar o usuário
+		if($u && $u->logar($_POST['email'],$_POST['senha'])){
+			
+			// Criando o session
+			session_start();
+			$_SESSION['usuario'] = $u;
+
+			// Redirecionando para a home
+			header('location: home.php');
+
+		} else {
+			$erro_login = true;
+		}
+		
 	}
 ?>
 
@@ -36,25 +58,15 @@
 					<span class="card-title"></span>
 					
 					<div class="input-field">
-						<select name="nivel" class="invalid">
-							<option value="3">Espectador</option>
-							<option value="2">Usuário</option>
-							<option value="1">Administrador</option>
-						</select>
-						<label>Nível do Usuário</label>
-					</div>
-					
-					<div class="input-field">
 						<!-- caso campo esteja inválido, adicionar class invallid -->
-						<input placeholder="E-mail" type="email" name="email">
+						<input placeholder="E-mail" type="email" name="email" value="<?= $email ?>">
 					</div>
 					
 					<div class="input-field">
-						<input placeholder="Senha" type="password" name="senha">
-						
-						<!-- para ser exibido quando o login estiver errado
-						<span class="helper-text red-text">Nível, email ou senha inválidos</span>
-						-->
+						<input placeholder="Senha" type="password" name="senha" value="<?= $senha ?>">
+						<?php if($erro_login):  ?>
+						<span class="helper-text red-text">Email ou senha inválidos</span>
+						<?php endif; ?>
 					</div>
 				</div>
 				

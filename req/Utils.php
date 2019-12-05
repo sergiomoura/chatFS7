@@ -66,24 +66,28 @@ abstract class Utils {
 		]);
 		
 		$dados = $query->fetch(PDO::FETCH_ASSOC);
-		if($dados['nivel'] == 1){
-			return new Administrador(
-				$dados['id'],
-				$dados['email'],
-				$dados['senha'],
-				$dados['bloqueado']);
-		} elseif($dados['nivel'] == 2) {
-			return new Usuario(
-				$dados['id'],
-				$dados['email'],
-				$dados['senha'],
-				$dados['bloqueado']);
+		if($dados){
+			if($dados['nivel'] == 1){
+				return new Administrador(
+					$dados['id'],
+					$dados['email'],
+					$dados['senha'],
+					$dados['bloqueado']);
+			} elseif($dados['nivel'] == 2) {
+				return new Usuario(
+					$dados['id'],
+					$dados['email'],
+					$dados['senha'],
+					$dados['bloqueado']);
+			} else {
+				return new Espectador(
+					$dados['id'],
+					$dados['email'],
+					$dados['senha'],
+					$dados['bloqueado']);
+			}
 		} else {
-			return new Espectador(
-				$dados['id'],
-				$dados['email'],
-				$dados['senha'],
-				$dados['bloqueado']);
+			return false;
 		}
 	}
 }

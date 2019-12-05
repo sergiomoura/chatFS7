@@ -16,4 +16,13 @@ class Espectador {
 		$this->logado = false;
 	}
 
+	public function logar($email,$senha){
+		if($this->email == $email && password_verify($senha,$this->senha)){
+			$this->logado = true;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
