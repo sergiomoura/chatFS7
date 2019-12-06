@@ -1,23 +1,3 @@
-<?php 
-include('./req/DB.php');
-include('./req/Espectador.php');
-include('./req/Usuario.php');
-include('./req/Administrador.php');
-
-// Tentando carregar o usuário a partir da session
-session_start();
-$u = $_SESSION['usuario'];
-
-// Redirecionando para login caso não esteja logado
-if(!$u){
-	die('Usuário não está logado.');
-}
-
-// Carregando mensagens
-$mensagens = $u->getMensagens();
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
