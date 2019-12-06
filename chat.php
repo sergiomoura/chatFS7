@@ -1,3 +1,23 @@
+<?php 
+include('./req/DB.php');
+include('./req/Espectador.php');
+include('./req/Usuario.php');
+include('./req/Administrador.php');
+
+// Tentando carregar o usuário a partir da session
+session_start();
+$u = $_SESSION['usuario'];
+
+// Redirecionando para login caso não esteja logado
+if(!$u){
+	die('Usuário não está logado.');
+}
+
+// Carregando mensagens
+$mensagens = $u->getMensagens();
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -49,22 +69,15 @@
 	</style>
 </head>
 <body>
-
-	<div class="msg propria">
+	<?php foreach($mensagens as $m): ?>
+	<div class="msg <?= $m['email']==$u->getEmail() ? 'propria' : 'alheia' ?>">
 		<div>
-			<div class="email">teste@teste.com</div>
-			<div class="hora">09:35</div>
-			<div class="texto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque est ex dolorum cumque molestias aut iusto deserunt, nemo exercitationem qui ex.</div>
+			<div class="email"><?= $m['email'] ?></div>
+			<div class="hora"><?= $m['hora'] ?></div>
+			<div class="texto"><?= $m['texto'] ?></div>
 		</div>
 	</div>
-
-	<div class="msg alheia">
-		<div>
-			<div class="email">teste@teste.com</div>
-			<div class="hora">09:35</div>
-			<div class="texto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque est ex dolorum cumque molestias aut iusto deserunt, nemo exercitationem qui ex.</div>
-		</div>
-	</div>
+	<?php endforeach; ?>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<script>

@@ -1,3 +1,20 @@
+<?php 
+
+	include ('./req/Espectador.php');
+	include ('./req/Usuario.php');
+	include ('./req/Administrador.php');
+
+	// Tentando carregar o usuário a partir da session
+	session_start();
+	$u = $_SESSION['usuario'];
+
+	// Redirecionando para login caso não esteja logado
+	if(!$u){
+		header('Location: login.php');
+	}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
